@@ -23,15 +23,6 @@ INSTALLED_APPS =
          ]
 ```
       
-### Sync With database
-Now that we’ve created the model, it’s time to add it to the database. To do this we need to open Command Promnt and run these two commands: 
--	python manage.py makemigrations 
--	python manage.py migrate
-
-Your terminal output should look something like this:
-
-<img src ="docmi.JPG">
-
 First we need to create **froms.py** file in our app location
 
 **`forms.py`**
@@ -44,4 +35,33 @@ class RegisterForm(UserCreationForm):
 		model = User
 		fields = ['username','first_name','last_name','email','password1','password2']
 ```
-We need to import Django forms first (from django import forms). Next, we have class Meta. Finally, we can say which field(s) should end up in our form. In this scenario if we want only few fields then metion them in a list formate.
+We need to import Django forms first (from django.contrib.auth.forms import UserCreationForm and from django.contrib.auth.models import User). Next, we have class Meta. Finally, we can say which field(s) should end up in our form. In this scenario if we want only few fields then metion them in a list formate.
+
+### View
+**`views.py`**
+```python
+from django.shortcuts import render
+
+# Create your views here.
+from django.http import HttpResponse,HttpResponseRedirect
+from django.urls import reverse
+from profiles.forms import RegisterForm
+
+def home(request):
+	return render(request,'profiles/index.html')
+
+
+
+def register(request):
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('profiles:home'))
+		else:
+			return HttpResponse("Invalid")
+	form = RegisterForm()
+	context = {'form':form}
+	return render(request,'profiles/register.html',context)
+```
+
