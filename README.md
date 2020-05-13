@@ -25,7 +25,7 @@ INSTALLED_APPS =
     'profiles',(appname)
          ]
 ```
-      
+### Forms     
 First we need to create **froms.py** file in our app location
 
 **`forms.py`**
@@ -40,7 +40,16 @@ class RegisterForm(UserCreationForm):
 ```
 We need to import Django forms first (from django.contrib.auth.forms import UserCreationForm and from django.contrib.auth.models import User). Next, we have class Meta. Finally, we can say which field(s) should end up in our form. In this scenario if we want only few fields then metion them in a list formate.
 
-### View
+### Sync With database
+
+Now that we’ve created the form, it’s time to add it to the database. To do this we need to open Command Promnt and run these two commands: 
+-	python manage.py makemigrations 
+-	python manage.py migrate
+Your terminal output should look something like this:
+
+<img src="docmi.JPG">
+
+### Views
 **`views.py`**
 ```python
 from django.shortcuts import render
@@ -57,10 +66,11 @@ def home(request):
 Initially we are using get method, To check how from is working, Here we are using BootstrapCDN
 > **_NOTE:_** Add the {% csrf_token %} to every Django template you create that uses POST to submit data. This will reduce the chance of forms being hijacked by malicious users.
 
-### templates
+### Templates
 
 **`header.html`**
-```<!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -134,8 +144,48 @@ Initially we are using get method, To check how from is working, Here we are usi
 	<h2>Hello home</h2>
 {% endblock %}
 ```
+Now run this project **manage.py** location open command prompt(cmd).
+
+```
+	python manage.py runserver
+```
+Now open browser and type url path
+```
+	https:localhost:8000/student
+```
+
 **`output:`**
 <img src ="index.JPG">
+
+### Urls
+
+Now our task is to add project urls(studentmanagement).
+
+**`studentmanagement(project)/urls.py`**
+```python
+from django.contrib import admin
+from django.urls import path,include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('student/',include('profiles.urls'))
+]
+```
+add application urls(profiles).
+
+**`profiles(app)/urls.py`**
+```python
+from django.contrib.auth import views as auth_views
+from django.urls import path
+from . import views
+app_name = 'profiles'
+urlpatterns = [
+	path('',views.home,name="home"),
+	path('register/',views.register,name="register"),
+	path('login/',auth_views.LoginView.as_view(template_name = 'profiles/login.html'),name="login"),
+	path('logout/',auth_views.LogoutView.as_view(template_name='profiles/logout.html'),name="logout")
+]
+```
 
 ### Form validation
 Till now we haven't used post method from register.html, a visitor will hit the `submit` button after filling up the details, that means the form method is changed to "POST".
