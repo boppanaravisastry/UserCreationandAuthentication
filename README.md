@@ -1,7 +1,18 @@
 # User Registration and User Authentication
 
-Django framework provide a built-in user management and authorization feature. You can use it to add user group and user account in Django project admin web page . You can also use the django.contrib.auth module to integrate the user authorization feature in your python source code. This article will tell you how to use it to implement a user registration and login example.
+- This document explains the usage of Django’s authentication system in its default configuration. This configuration has evolved to serve the most common project needs, handling a reasonably wide range of tasks, and has a careful implementation of passwords and permissions.
+- Django authentication provides both authentication and authorization together and is generally referred to as the authentication system, as these features are somewhat coupled.
 
+### User objects
+User objects are the core of the authentication system. They typically represent the people interacting with your site and are used to enable things like restricting access, registering user profiles, associating content with creators etc. Only one class of user exists in Django’s authentication framework, i.e., 'superusers' or admin 'staff' users are just user objects with special attributes set, not different classes of user objects.
+
+The primary attributes of the default user are:
+- username
+- first_name
+- last_name
+- email
+- password1
+- password2
 
 # Creating a Django Project & Application
 
