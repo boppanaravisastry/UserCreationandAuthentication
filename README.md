@@ -144,18 +144,6 @@ Initially we are using get method, To check how from is working, Here we are usi
 	<h2>Hello home</h2>
 {% endblock %}
 ```
-Now run this project **manage.py** location open command prompt(cmd).
-
-```
-	python manage.py runserver
-```
-Now open browser and type url path
-```
-	https:localhost:8000/student
-```
-
-**`output:`**
-<img src ="index.JPG">
 
 ### Urls
 
@@ -186,6 +174,21 @@ urlpatterns = [
 	path('logout/',auth_views.LogoutView.as_view(template_name='profiles/logout.html'),name="logout")
 ]
 ```
+
+Now run this project **manage.py** location open command prompt(cmd).
+
+```
+	python manage.py runserver
+```
+Now open browser and type url path
+```
+	https:localhost:8000/student
+```
+
+**`output:`**
+<img src ="index.JPG">
+
+
 
 ### Form validation
 Till now we haven't used post method from register.html, a visitor will hit the `submit` button after filling up the details, that means the form method is changed to "POST".
