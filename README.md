@@ -135,6 +135,7 @@ Initially we are using get method, To check how from is working, Here we are usi
 {% endblock %}
 ```
 **`output:`**
+<img src ="index.JPG">
 
 ### Form validation
 Till now we haven't used post method from register.html, a visitor will hit the `submit` button after filling up the details, that means the form method is changed to "POST".
@@ -172,7 +173,7 @@ is_valid() validates the form details given by visitor
 {% endblock%}
 ```
 **`output:`**
-
+<img src ="regis1.JPG">
 
 **`login.html`**
 
@@ -191,7 +192,7 @@ is_valid() validates the form details given by visitor
 {% endblock %}
 ```
 **`output:`**
-
+<img src ="login1.JPG">
 
 **`logout.html`**
 
@@ -203,3 +204,4 @@ is_valid() validates the form details given by visitor
 {% endblock %}
 ```
 **`output:`**
+<img src ="logout.JPG">
