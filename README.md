@@ -64,4 +64,95 @@ def register(request):
 	context = {'form':form}
 	return render(request,'profiles/register.html',context)
 ```
+Initially we are using get method, To check how from is working, Here we are using BootstrapCDN
+> **_NOTE:_** Add the {% csrf_token %} to every Django template you create that uses POST to submit data. This will reduce the chance of forms being hijacked by malicious users.
+### template
+**`header.html`**
+```<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+	<title> {% block title %} {% endblock %} </title>
+</head>
+<body style="padding-top: 100px;">
+	{% include 'profiles/nav.html' %}
+	<div class="container text-left" style="padding-top: 100px;">
+		{% block content %}
+		{% endblock %}
+	</div>
+	
+</body>
+</html>
+```
+**`nav.html`**
+```html
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top ">
+	<li class="nav-item mr-auto">
+
+		<a href="{% url 'profiles:home' %}" class="navbar-brand">Home 
+		</a>
+	</li>
+
+	<li class="nav-item mr-auto">
+		<a href="#" class="navbar-brand"> 
+			<span class="title"> student management </span> 
+		</a>
+	</li>
+  	<li class="nav-item">
+  		{% if request.user.is_authenticated %}
+  			<a href="#" class="navbar-brand">{{request.user.username}}</a>
+  			<a href="{% url 'profiles:logout' %}" class="navbar-brand">Logout</a>
+  		{% else %}
+  			<a href="{% url 'profiles:login' %}" class="navbar-brand">Login</a>
+  			<a href="{% url 'profiles:register' %}" class="navbar-brand">Register</a>
+  		{% endif %}
+	</li>
+				  
+</nav>
+
+```
+
+**`register.html`**
+```html
+{% extends 'profiles/header.html' %}
+{% block content %}
+			<form action="{% url 'profiles:register' %}" method="POST">
+				<center><h1>Registration Form</h1></center>
+				{% csrf_token %}
+				{{form.as_p}}
+				<input type="submit" class="btn btn-primary" value="signup"  name="submit">
+			</form>
+		
+{% endblock%}
+```
+
+**`login.html`**
+```html
+{% extends 'profiles/header.html' %}
+
+{% block content %}
+
+	<form action="{% url 'profiles:login' %}" method="POST">
+		<center><h1>LoginForm</h1></center>
+		{% csrf_token %}
+		{{form.as_p}}
+		<input type="submit" value="login" name="submit">
+	</form>
+
+{% endblock %}
+```
+
+**`logout.html`**
+```html
+{% extends "profiles/header.html " %}
+
+{% block content %}
+	<h2>Logout success</h2>
+{% endblock %}
+```
