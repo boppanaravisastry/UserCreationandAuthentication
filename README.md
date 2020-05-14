@@ -94,7 +94,7 @@ Initially we are using get method, To check how from is working, Here we are usi
 <nav class="navbar navbar-expand-sm bg-light">
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'home'%}">Home</a>
+      <a class="nav-link" href="{% url 'show'%}">Home</a>
     </li>
     <li class="nav-item">
     	{% if user.is_authenticated %}
@@ -129,7 +129,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.home,name = 'home'),
+    path('',views.home,name = 'show'),
     path('signup/',views.signup,name = 'signup'),
     path('signin/',auth_views.LoginView.as_view(template_name='user/signin.html'),name = 'signin'),
     path('signout/',auth_views.LogoutView.as_view(template_name='user/signout.html'),name = 'signout'),
@@ -147,7 +147,7 @@ Now open browser and type url path
 ```
 
 **`output:`**
-<img src =".JPG">
+<img src ="home.JPG">
 
 
 
@@ -182,7 +182,7 @@ is_valid() validates the form details given by visitor
 	</form>
 {% endblock%}```
 **`output:`**
-<img src =".JPG">
+<img src ="signup.JPG">
 
 **`signin.html`**
 
@@ -198,7 +198,7 @@ is_valid() validates the form details given by visitor
 {% endblock%} 
 ```
 **`output:`**
-<img src =".JPG">
+<img src ="signin.JPG">
 
 **`signout.html`**
 
@@ -209,4 +209,4 @@ is_valid() validates the form details given by visitor
 {% endblock %}
 ```
 **`output:`**
-<img src =".JPG">
+<img src ="signout.JPG">
