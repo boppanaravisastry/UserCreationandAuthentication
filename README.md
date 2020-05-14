@@ -20,20 +20,20 @@ The primary attributes of the default user are:
 
 ### Project Create
 ```
-  django-admin startproject studentmanagement
+  django-admin startproject ravi
 ```
-- Next, create an application using manage.py, you can name it profiles
+- Next, create an application using manage.py, you can name it user
 
 ### App Create
 ```
-  django-admin startapp profiles
+  django-admin startapp user
 ```
 > **_NOTE:_** Don't forget to mention app name in INSTALLED_APPS list of settings.py file, if you created a new app
 
 ```python
 INSTALLED_APPS = 
 [
-    'profiles',(appname)
+    'user',(appname)
          ]
 ```
 ### Forms     
@@ -63,15 +63,12 @@ Your terminal output should look something like this:
 ### Views
 **`views.py`**
 ```python
-from django.shortcuts import render
-
+from django.shortcuts import render,redirect
+from user.forms import *
 # Create your views here.
-from django.http import HttpResponse,HttpResponseRedirect
-from django.urls import reverse
-from profiles.forms import RegisterForm
 
 def home(request):
-	return render(request,'profiles/index.html')
+	return render(request,'user/home.html')
 ```
 
 Initially we are using get method, To check how from is working, Here we are using BootstrapCDN
@@ -79,110 +76,63 @@ Initially we are using get method, To check how from is working, Here we are usi
 
 ### Templates
 
-**`header.html`**
+**`home.html`**
+
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-
-	<title> {% block title %} {% endblock %} </title>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
-<body style="padding-top: 100px;">
-	{% include 'profiles/nav.html' %}
-	<div class="container text-left" style="padding-top: 100px;">
-		{% block content %}
-		{% endblock %}
-	</div>
-	
+<body>
+<nav class="navbar navbar-expand-sm bg-light">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'home'%}">Home</a>
+    </li>
+    <li class="nav-item">
+    	{% if user.is_authenticated %}
+      <a class="nav-link" href="{% url 'signout' %}">Signout</a>
+    </li>
+    {%else%}
+    <li class="nav-item">
+      <a class="nav-link" href="{%url 'signup'%}">Signup</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'signin' %}">Signin</a>
+    </li>
+    {%endif%}
+  </ul>
+</nav>
+{% block content %}
+{% endblock %}
 </body>
 </html>
-```
-
-**`nav.html`**
-
-```html
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top ">
-	<li class="nav-item mr-auto">
-
-		<a href="{% url 'profiles:home' %}" class="navbar-brand">Home 
-		</a>
-	</li>
-
-	<li class="nav-item mr-auto">
-		<a href="#" class="navbar-brand"> 
-			<span class="title"> student management </span> 
-		</a>
-	</li>
-  	<li class="nav-item">
-  		{% if request.user.is_authenticated %}
-  			<a href="#" class="navbar-brand">{{request.user.username}}</a>
-  			<a href="{% url 'profiles:logout' %}" class="navbar-brand">Logout</a>
-  		{% else %}
-  			<a href="{% url 'profiles:login' %}" class="navbar-brand">Login</a>
-  			<a href="{% url 'profiles:register' %}" class="navbar-brand">Register</a>
-  		{% endif %}
-	</li>
-				  
-</nav>
-
-```
-**`index.html`**
-
-```html
-{% extends 'profiles/header.html' %}
-{% comment %}
-	<h1>welcome {{request.user.email}} </h1>
-	{% if request.user.is_authenticated %}
-		<a href="{% url 'profiles:logout' %}">Logout</a>
-	{% else %}
-		<a href="{% url 'profiles:login' %}">Login</a>
-		<a href="{% url 'profiles:register' %}">Register</a>
-	{% endif %}
-{% endcomment %}
- {{ form.errors }} {{ form.non_field_errors }}
-
-{% block title %}
-	Homepage
-{% endblock %}
-
-{% block content %}
-	<h2>Hello home</h2>
-{% endblock %}
 ```
 
 ### Urls
 
 Now our task is to add project urls(studentmanagement).
 
-**`studentmanagement(project)/urls.py`**
+**`ravi(project)/urls.py`**
 ```python
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path
+from user import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('student/',include('profiles.urls'))
-]
-```
-add application urls(profiles).
-
-**`profiles(app)/urls.py`**
-```python
-from django.contrib.auth import views as auth_views
-from django.urls import path
-from . import views
-app_name = 'profiles'
-urlpatterns = [
-	path('',views.home,name="home"),
-	path('register/',views.register,name="register"),
-	path('login/',auth_views.LoginView.as_view(template_name = 'profiles/login.html'),name="login"),
-	path('logout/',auth_views.LogoutView.as_view(template_name='profiles/logout.html'),name="logout")
+    path('',views.home,name = 'home'),
+    path('signup/',views.signup,name = 'signup'),
+    path('signin/',auth_views.LoginView.as_view(template_name='user/signin.html'),name = 'signin'),
+    path('signout/',auth_views.LogoutView.as_view(template_name='user/signout.html'),name = 'signout'),
 ]
 ```
 
@@ -193,11 +143,11 @@ Now run this project **manage.py** location open command prompt(cmd).
 ```
 Now open browser and type url path
 ```
-	https:localhost:8000/student
+	https:localhost:8000
 ```
 
 **`output:`**
-<img src ="index.JPG">
+<img src =".JPG">
 
 
 
@@ -208,64 +158,55 @@ Now our task is to validate the form and save details, for that we need to chang
 
 **`views.py`**
 ``` python
-def register(request):
-	if request.method == 'POST':
-		form = RegisterForm(request.POST)
+def signup(request):
+	if request.method=="POST":
+		form = UserSignUpForm(request.POST)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect(reverse('profiles:home'))
-		else:
-			return HttpResponse("Invalid")
-	form = RegisterForm()
-	context = {'form':form}
-	return render(request,'profiles/register.html',context)
+			return redirect('/signin')
+	form = UserSignUpForm()
+	return render(request,'user/signup.html',{'form':form})
 ```
 is_valid() validates the form details given by visitor
 
-**`register.html`**
+**`signup.html`**
 
 ```html
-{% extends 'profiles/header.html' %}
+{% extends 'user/home.html'%}
 {% block content %}
-			<form action="{% url 'profiles:register' %}" method="POST">
-				<center><h1>Registration Form</h1></center>
-				{% csrf_token %}
-				{{form.as_p}}
-				<input type="submit" class="btn btn-primary" value="signup"  name="submit">
-			</form>
-		
-{% endblock%}
-```
-**`output:`**
-<img src ="regis1.JPG">
-
-**`login.html`**
-
-```html
-{% extends 'profiles/header.html' %}
-
-{% block content %}
-
-	<form action="{% url 'profiles:login' %}" method="POST">
-		<center><h1>LoginForm</h1></center>
+	<h1>SignUpForm</h1>
+	<form method="POST" action="{% url 'signup' %}">
 		{% csrf_token %}
 		{{form.as_p}}
-		<input type="submit" value="login" name="submit">
+		<input type="submit" value="signup">
 	</form>
-
-{% endblock %}
-```
+{% endblock%}```
 **`output:`**
-<img src ="login1.JPG">
+<img src =".JPG">
 
-**`logout.html`**
+**`signin.html`**
 
 ```html
-{% extends "profiles/header.html " %}
+{%extends 'user/home.html' %}
+{% block content%}
+<h1>SigninForm</h1>
+	<form method="POST">
+		{% csrf_token %}
+		{{form.as_p}}
+		<input type="submit" value="signin">
+	</form>
+{% endblock%} 
+```
+**`output:`**
+<img src =".JPG">
 
-{% block content %}
-	<h2>Logout success</h2>
+**`signout.html`**
+
+```html
+{%extends 'user/home.html' %}
+{% block content%}
+<p>Sucessfully signout{{request.user}}</p>
 {% endblock %}
 ```
 **`output:`**
-<img src ="logout.JPG">
+<img src =".JPG">
