@@ -180,7 +180,8 @@ is_valid() validates the form details given by visitor
 		{{form.as_p}}
 		<input type="submit" value="signup">
 	</form>
-{% endblock%}```
+{% endblock%}
+```
 **`output:`**
 <img src ="signup.JPG">
 
