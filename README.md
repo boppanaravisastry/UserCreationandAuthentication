@@ -146,7 +146,6 @@ Now open browser and type url path
 	https:localhost:8000
 ```
 
-**`output:`**
 <img src ="home.JPG">
 
 
@@ -182,7 +181,6 @@ is_valid() validates the form details given by visitor
 	</form>
 {% endblock%}
 ```
-**`output:`**
 <img src ="signup.JPG">
 
 **`signin.html`**
@@ -198,7 +196,6 @@ is_valid() validates the form details given by visitor
 	</form>
 {% endblock%} 
 ```
-**`output:`**
 <img src ="signin.JPG">
 
 **`signout.html`**
@@ -209,5 +206,4 @@ is_valid() validates the form details given by visitor
 <p>Sucessfully signout{{request.user}}</p>
 {% endblock %}
 ```
-**`output:`**
 <img src ="signout.JPG">
