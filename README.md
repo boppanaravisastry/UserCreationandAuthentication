@@ -183,6 +183,13 @@ is_valid() validates the form details given by visitor
 ```
 <img src ="signup.JPG">
 
+- We can must add the inside **settings.py** file below in LOGIN_URL links.
+```python
+	LOGIN_REDIRECT_URL = 'show'
+	LOGIN_URL = 'signin'
+```
+
+
 **`signin.html`**
 
 ```html
