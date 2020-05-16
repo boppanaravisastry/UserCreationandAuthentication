@@ -213,4 +213,10 @@ is_valid() validates the form details given by visitor
 <p>Sucessfully signout{{request.user}}</p>
 {% endblock %}
 ```
+before signout window.
+
+<img src ="signout.JPG">
+
+after signout window.
+
 <img src ="signout.JPG">
